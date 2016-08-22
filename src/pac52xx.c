@@ -22,7 +22,8 @@
 #include "target.h"
 
 #define PAC52_PACIDR 0x00100044
-#define PAC52_PACIDR_PAC5223 0xff025223
+#define PAC52_PACIDR_PAC5223 0xff005223
+#define PAC52_PACIDR_MASK    0xff00ffff
 
 #define PAC52_FLASHLOCK 0x40020000
 #define PAC52_FLASHLOCK_RESET 0
@@ -59,7 +60,7 @@ static void pac52xx_add_flash(target *t,
 bool pac52xx_probe(target *t)
 {
 	uint32_t id = target_mem_read32(t, PAC52_PACIDR);
-	switch (id) {
+	switch (id & PAC52_PACIDR_MASK) {
 	case PAC52_PACIDR_PAC5223:
 		t->driver = "PAC5223";
 		target_add_ram(t, 0x20000000, 0x2000);
